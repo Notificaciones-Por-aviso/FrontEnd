@@ -1,0 +1,21 @@
+.table {
+    border-collapse: separate; /* Necesario para que funcione el border-radius */
+    border-spacing: 0;
+  }
+  
+  .table thead th:first-child {
+    border-top-left-radius: 15px;
+  }
+  
+  .table thead th:last-child {
+    border-top-right-radius: 15px;
+  }
+  
+  .table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 15px;
+  }
+  
+  .table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 15px;
+  }
+  
