@@ -1,7 +1,8 @@
-const urlBase = "http://localhost:8080";
+// const urlBase = "http://localhost:8080";
+const urlBase = "https://notificacionesporaviso-183e0b769caa.herokuapp.com";
 
 export const fetchObtenerComparendos = async (identificacion) => {
-    const url = `${urlBase}/notificacionesPorAviso/${identificacion}`;          
+    const url = `${urlBase}/notificacionesPorAviso/${identificacion}`;         
 
     try {
         const response = await fetch(url, {
@@ -30,7 +31,7 @@ export const fetchObtenerComparendos = async (identificacion) => {
 
 // Función para descargar el PDF basado en el número de comparendo
 export const fetchDescargarPDF = async (numeroComparendo) => {
-    const url = `${urlBase}/notificacionesPorAviso/descargarPDF/${numeroComparendo}`;          
+    const url = `${urlBase}/notificacionesPorAviso/descargarPDF/${numeroComparendo}`;    
 
     try {
         const response = await fetch(url, {
@@ -55,3 +56,6 @@ export const fetchDescargarPDF = async (numeroComparendo) => {
         throw new Error(error.message || 'Error desconocido al descargar el PDF');
     }
 };
+
+
+

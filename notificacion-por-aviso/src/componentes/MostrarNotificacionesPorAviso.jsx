@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import LogoIntrasfun from "../images/Intrasfun.png";
-import IconoPdf from "../images/iconoPdf.png";
 import "./MostrarNotificacionesPorAviso.css";
 import { fetchObtenerComparendos, fetchDescargarPDF } from "../servicio/Api"; // Si está usando una API
 import { FaRegFilePdf } from "react-icons/fa6";
@@ -10,7 +9,9 @@ const MostrarNotificacionesPorAviso = () => {
   const [identificacion, setIdentificacion] = useState(""); // Para manejar el input del usuario
   const [datos, setDatos] = useState([]); // Datos recibidos
   const [error, setError] = useState(null); // Para manejar errores
-  const [cargando, setCargando] = useState(false); // Para manejar el estado de carga                      
+  const [cargando, setCargando] = useState(false); // Para manejar el estado de carga     
+  
+  const urlBase = "https://notificacionesporaviso-183e0b769caa.herokuapp.com";
   
   const obtenerNotificacion = async () => {
     if (!identificacion.trim()) {
@@ -43,56 +44,7 @@ const MostrarNotificacionesPorAviso = () => {
     setDatos([]); // Limpiamos los resultados
     setMostrarTabla(false); // Ocultar tabla
     setError(null); // Limpiar mensaje de error
-  };
-
-  // Ejemplo de datos
-  // const datosEjemplo = [
-  //   {
-  //     id: 1,
-  //     identificacion: "U1308476",
-  //     comparendo: "47288000000026927200",
-  //     fechaComparendo: "2020-01-28",
-  //     estado: "PAGADO",
-  //     placa: "FZL385",
-  //     resolusionAviso: "RES-FM-4503-20-FEBRERO",
-  //   },
-  //   {
-  //     id: 2,
-  //     identificacion: "U1308476",
-  //     comparendo: "47288000000026927199",
-  //     fechaComparendo: "2020-01-28",
-  //     estado: "COACTIVO",
-  //     placa: "FZL385",
-  //     resolusionAviso: "RES-FM-4504-20-FEBRERO",
-  //   },
-  //   {
-  //     id: 3,
-  //     identificacion: "U1308476",
-  //     comparendo: "47288000000026927199",
-  //     fechaComparendo: "2020-01-28",
-  //     estado: "COACTIVO",
-  //     placa: "FZL385",
-  //     resolusionAviso: "RES-FM-4504-20-FEBRERO",
-  //   },
-  //   {
-  //     id: 4,
-  //     identificacion: "U1308476",
-  //     comparendo: "47288000000026927199",
-  //     fechaComparendo: "2020-01-28",
-  //     estado: "COACTIVO",
-  //     placa: "FZL385",
-  //     resolusionAviso: "RES-FM-4504-20-FEBRERO",
-  //   },
-  //   {
-  //     id: 5,
-  //     identificacion: "U1308476",
-  //     comparendo: "47288000000026927199",
-  //     fechaComparendo: "2020-01-28",
-  //     estado: "COACTIVO",
-  //     placa: "FZL385",
-  //     resolusionAviso: "RES-FM-4504-20-FEBRERO",
-  //   },
-  // ];
+  };  
 
   return (
     <div>
@@ -126,14 +78,14 @@ const MostrarNotificacionesPorAviso = () => {
                 placeholder="Ingrese Identificación"
                 value={identificacion}
                 onChange={(e) => setIdentificacion(e.target.value)}
-                aria-label="Recipient's username with two button addons" ///////ESTO SE PUEDE ELIMINAR
+                aria-label="Recipient's username with two button addons" 
                 maxLength="15"
               />
               <button
                 className="btn btn-outline-primary"
                 type="button"
                 onClick={obtenerNotificacion}
-                disabled={cargando} //+++++++++++++++++++++++++++ NUEVO +++++++++++++++++++
+                disabled={cargando} 
               >
                 {cargando ? "Cargando..." : "Buscar"}
               </button>
@@ -177,30 +129,14 @@ const MostrarNotificacionesPorAviso = () => {
                     <td>{info.estadoCartera}</td>
                     <td>{info.placa}</td>
                     <td>{info.resolusionAviso}</td>
-                    <td>
-                      {/* <button
-                        onClick={() => fetchDescargarPDF(info.numeroComparendo)} // Llama a la función fetchDescargarPDF con el número de comparendo
-                        className="btn btn-link"
-                      >
-                        <img src={IconoPdf} alt="PDF" width="24" height="24" />
-                      </button> */}
-                      <a
-                        href={`http://localhost:8080/notificacionesPorAviso/descargarPDF/${info.numeroComparendo}`}
+                    <td>                      
+                      <a                        
+                        href={`${urlBase}/notificacionesPorAviso/descargarPDF/${info.numeroComparendo}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <FaRegFilePdf size={24} color="#1e3050" /> {/* Ajusta el tamaño y el color del ícono */}
-                        {/* <img
-                          src={IconoPdf}
-                          alt="PDF"
-                          width="24" // Ajusta el tamaño de la imagen según sea necesario
-                          height="24"
-                        /> */}
-                      </a>
-                      {/* <i
-                        className="fa-regular fa-file-pdf"
-                        style={{ color: "#1e3050", fontSize: "24px" }}
-                      ></i> */}
+                        <FaRegFilePdf size={24} color="#1e3050" /> {/* Ajusta el tamaño y el color del ícono */}                        
+                      </a>                      
                     </td>
                   </tr>
                 ))}
