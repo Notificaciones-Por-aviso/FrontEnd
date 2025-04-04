@@ -166,9 +166,9 @@ const PortedePlaca = () => {
                 {datos.map((info, index) => (
                   <tr key={index}>                   
                     <td>{info.id}</td>
-                    <td>{info.identificacionUsuario}</td>
+                    <td>{info.identificacionUsuario || "No registra"}</td>
                     <td>{info.placa}</td>
-                    <td>{info.nombreORazonSocial}</td>
+                    <td>{info.nombreORazonSocial || "No registra"}</td>
                     <td>{info.resolusion}</td>                    
                     <td>{formatearSaldo(info.saldoTotal)}</td>
 
