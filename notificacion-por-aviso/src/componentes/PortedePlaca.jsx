@@ -109,7 +109,7 @@ const PortedePlaca = () => {
             fontFamily: "Roboto, sans-serif",
           }}
         >
-          Notificaciones porte de placa
+          Notificaciones porte de placa 
         </h1>
 
         {/* Formulario para búsqueda */}
