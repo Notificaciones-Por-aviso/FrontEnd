@@ -9,15 +9,28 @@ import Footer from "./componentes/footer/Footer";
 import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PortedePlaca from "./componentes/PortedePlaca"; // Importamos el nuevo componente
+
 function App() {
   return (
+    <Router>
     <div id="root">
       <div className="content">
         <Header />
-        <MostrarNotificacionesPorAviso />
+
+        <Routes>
+        <Route path="/" element={<MostrarNotificacionesPorAviso />} />
+        <Route path="/porte-placa" element={<PortedePlaca />} />
+        
+        {/*<MostrarNotificacionesPorAviso />*/}
+      
+      </Routes>
+      
       </div>
       <Footer />
     </div>
+    </Router>
   );
 }
 

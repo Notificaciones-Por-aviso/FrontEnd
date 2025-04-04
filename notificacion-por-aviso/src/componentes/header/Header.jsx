@@ -5,8 +5,8 @@ import Styles from "./Header.module.css";
 const Header = () => {
   return (
     <header
-      className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom"
-      style={{ backgroundColor: "#005dc7" }}
+    className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between border-bottom"
+    style={{ backgroundColor: "#005dc7", padding: "0", marginBottom: "0", height: "90px" }}
     >
       <div className="col-md-3 mb-2 mb-md-0 d-flex justify-content-center">
         <img
@@ -22,8 +22,8 @@ const Header = () => {
           Instituto Municipal de Tránsito y Transporte de Fundación Magdalena -
           Intrasfun
         </p>
-      </div>      
-    </header>    
+      </div>         
+    </header>        
   );
 };
 

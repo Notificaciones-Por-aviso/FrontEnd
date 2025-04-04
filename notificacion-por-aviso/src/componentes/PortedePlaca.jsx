@@ -1,37 +1,35 @@
-import React, { useState } from "react";
-import LogoIntrasfun from "../images/Intrasfun.png";
-import "./MostrarNotificacionesPorAviso.css";
-import { fetchObtenerComparendos, fetchDescargarPDF } from "../servicio/Api"; // Si está usando una API
-import { FaRegFilePdf } from "react-icons/fa6";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import LogoIntrasfun from "../images/Intrasfun.png";
+import { fetchObtenerPorteDePlaca } from "../servicio/Api"; // Si está usando una API
+import { FaRegFilePdf } from "react-icons/fa6";
 
-
-const MostrarNotificacionesPorAviso = () => {
-  const [mostrarTabla, setMostrarTabla] = useState(false); // Controla la visibilidad de la tabla
-  const [identificacion, setIdentificacion] = useState(""); // Para manejar el input del usuario
-  const [datos, setDatos] = useState([]); // Datos recibidos
+const PortedePlaca = () => {
+  const [activeTab, setActiveTab] = useState("placa"); // Para manejar las opciones del navbar
+  const [placa, setPlaca] = useState(""); // Para manejar el input del usuario
   const [error, setError] = useState(null); // Para manejar errores
-  const [cargando, setCargando] = useState(false); // Para manejar el estado de carga  
-  const [activeTab, setActiveTab] = useState("notificaciones"); // Para manejar las opciones del navbar  
+  const [mostrarTabla, setMostrarTabla] = useState(false); // Controla la visibilidad de la tabla
+  const [cargando, setCargando] = useState(false); // Para manejar el estado de carga
+  const [datos, setDatos] = useState([]); // Datos recibidos
 
-  const urlBase = "https://notificacionesporaviso-183e0b769caa.herokuapp.com";  
-  //const urlBase = "http://localhost:8080";
+  const urlBase = "https://notificacionesporaviso-183e0b769caa.herokuapp.com";
+  //const urlBase = "http://localhost:8080";    
 
   const obtenerNotificacion = async () => {
-    if (!identificacion.trim()) {
-      setError("Por favor ingrese una identificación válida.");
+    if (!placa.trim()) {
+      setError("Por favor ingrese una placa válida.");
       setMostrarTabla(false); // Ocultar tabla en caso de error
       return;
     }
-    if (identificacion.trim().length > 15) {
-      setError("La identificación no puede tener más de 15 caracteres.");
+    if (placa.trim().length > 6) {
+      setError("La placa no puede tener más de 6 caracteres.");
       setMostrarTabla(false); // Ocultar tabla en caso de error
       return;
     }
     setCargando(true); // Empieza el estado de carga
     try {
-      const result = await fetchObtenerComparendos(identificacion.trim()); // Llamada a la API real
-      setDatos(result); // Guardar los datos recibidos
+      const result = await fetchObtenerPorteDePlaca(placa.trim()); // Llamada a la API real
+      setDatos([result]); // Guardar los datos recibidos
       setMostrarTabla(true); // Mostrar tabla si hay datos
       setError(null); // Limpiar error si la llamada es exitosa
     } catch (err) {
@@ -44,42 +42,57 @@ const MostrarNotificacionesPorAviso = () => {
 
   // Función para limpiar el formulario y resetear el estado
   const limpiarFormulario = () => {
-    setIdentificacion("");
+    setPlaca("");
     setDatos([]); // Limpiamos los resultados
     setMostrarTabla(false); // Ocultar tabla
     setError(null); // Limpiar mensaje de error
   };
 
+  //Para que se vea el valro del salto más profesional en la tabla para el usuario
+  const formatearSaldo = (valor) => {
+    if (!valor) return "$0";
+  
+    const numero = parseFloat(valor.toString().replace(/[^\d]/g, "")); // quitar puntos o símbolos
+    return `$${numero.toLocaleString("es-CO")}`;
+  };
+  
+
   return (
     <div>
       <div className="container text-center">
-        {/*<nav className="navbar navbar-expand-lg bg-body-tertiary">*/}
         <nav
           className="navbar navbar-expand-lg navbar-dark"
           style={{ backgroundColor: "#ffffff" }} //#e3f2fd
         >
           <div className="container d-flex justify-content-center">
             <div className="navbar-nav d-flex flex-row gap-3">
-            <Link
-              to="/"
-              className={`nav-link px-3 fs-5 border-end ${activeTab === "notificaciones" ? "active fw-bold text-decoration-underline" : ""}`}
-              style={{ color: "#2f3732", borderColor: "#2f3732" }}
-              onClick={() => setActiveTab("notificaciones")}
-            >
-              Notificaciones por aviso
-            </Link>
-            <Link
-              to="/porte-placa"
-              className={`nav-link px-3 fs-5 ${activeTab === "placa" ? "active fw-bold text-decoration-underline" : ""}`}
-              style={{ color: "#2f3732" }}
-              onClick={() => setActiveTab("placa")}
-            >
-              Porte de placa
-            </Link>
+              <Link
+                to="/"
+                className={`nav-link px-3 fs-5 border-end ${
+                  activeTab === "notificaciones"
+                    ? "active fw-bold text-decoration-underline"
+                    : ""
+                }`}
+                style={{ color: "#2f3732", borderColor: "#2f3732" }}
+                onClick={() => setActiveTab("notificaciones")}
+              >
+                Notificaciones por aviso
+              </Link>
+              <Link
+                to="/porte-placa"
+                className={`nav-link px-3 fs-5 ${
+                  activeTab === "placa"
+                    ? "active fw-bold text-decoration-underline"
+                    : ""
+                }`}
+                style={{ color: "#2f3732" }}
+                onClick={() => setActiveTab("placa")}
+              >
+                Porte de placa
+              </Link>
             </div>
           </div>
         </nav>
-
         <div className="container">
           <img
             src={LogoIntrasfun}
@@ -96,7 +109,7 @@ const MostrarNotificacionesPorAviso = () => {
             fontFamily: "Roboto, sans-serif",
           }}
         >
-          Notificaciones por Aviso
+          Notificaciones porte de placa
         </h1>
 
         {/* Formulario para búsqueda */}
@@ -106,11 +119,11 @@ const MostrarNotificacionesPorAviso = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Ingrese Identificación"
-                value={identificacion}
-                onChange={(e) => setIdentificacion(e.target.value)}
+                placeholder="Ingrese Placa"
+                value={placa}
+                onChange={(e) => setPlaca(e.target.value)}
                 aria-label="Recipient's username with two button addons"
-                maxLength="15"
+                maxLength="6"
               />
               <button
                 className="btn btn-outline-primary"
@@ -140,29 +153,29 @@ const MostrarNotificacionesPorAviso = () => {
             <table className="table">
               <thead className="table-primary">
                 <tr>
-                  <th>ID</th>
+                  <th>ID</th>                  
                   <th>Identificación</th>
-                  <th>Comparendo</th>
-                  <th>Fecha Comparendo</th>
-                  <th>Estado</th>
                   <th>Placa</th>
-                  <th>Resolusión Aviso</th>
+                  <th>Nombre/razón social</th>
+                  <th>Resolusión</th>
+                  <th>Total Saldo</th>                  
                   <th>Descargar PDF</th>
                 </tr>
               </thead>
               <tbody>
                 {datos.map((info, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{info.idUsuario}</td>
-                    <td>{info.numeroComparendo}</td>
-                    <td>{info.fechaComparendo}</td>
-                    <td>{info.estadoCartera}</td>
+                  <tr key={index}>                   
+                    <td>{info.id}</td>
+                    <td>{info.identificacionUsuario}</td>
                     <td>{info.placa}</td>
-                    <td>{info.resolusionAviso}</td>
+                    <td>{info.nombreORazonSocial}</td>
+                    <td>{info.resolusion}</td>                    
+                    <td>{formatearSaldo(info.saldoTotal)}</td>
+
+                    
                     <td>
                       <a
-                        href={`${urlBase}/notificacionesPorAviso/descargarPDF/${info.numeroComparendo}`}
+                        href={`${urlBase}/porteDePlaca/descargarPDF/${info.placa}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -185,4 +198,4 @@ const MostrarNotificacionesPorAviso = () => {
   );
 };
 
-export default MostrarNotificacionesPorAviso;
+export default PortedePlaca;
